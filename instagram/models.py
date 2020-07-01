@@ -1,7 +1,15 @@
+from django.conf import settings  # settings import
 from django.db import models
 
 
 class Post(models.Model):
+
+    """ Post Model """
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # settings 의 AUTH_USER_MODEL, USER MODEL이 변경될 수 있기 때문
+        on_delete=models.CASCADE,
+    )
     message = models.TextField()
     photo = models.ImageField(blank=True, upload_to="instagram/post/%Y/%m/%d")
     is_public = models.BooleanField(default=False, verbose_name="공개여부")
@@ -26,3 +34,23 @@ class Post(models.Model):
     #     return len(self.message)
 
     # message_length.short_description = "메세지 글자수"
+
+
+class Comment(models.Model):
+
+    """ Comment Model """
+
+    post = models.ForeignKey(
+        # "instagram.Post"
+        # "Post"
+        Post,
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_public": True},
+    )  # post_id 필드 생성
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+
+        return self.message
