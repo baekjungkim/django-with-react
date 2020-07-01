@@ -21,7 +21,12 @@ from django.urls import path, include
 # from askcompany import settings
 from django.conf import settings
 
+# api_v1_patterns = [
+#     # path()
+# ]
+
 urlpatterns = [
+    # path('api/v1/', include(api_v1_patterns)),
     path("admin/", admin.site.urls),  # URL Reverse
     path("accounts/", include("accounts.urls")),
     path("blog1/", include("blog1.urls")),

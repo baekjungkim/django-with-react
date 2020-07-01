@@ -26,3 +26,11 @@ def post_list(request):
 def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
 
     return render(request, "instagram/post_list.html", {})
+
+
+def archives_year(request, year):
+    return HttpResponse(f"{year}년 archives")
+
+
+def archives_slug(request, slug):
+    return HttpResponse(f"{slug} 입니다.")
