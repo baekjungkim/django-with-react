@@ -9,6 +9,7 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,  # settings 의 AUTH_USER_MODEL, USER MODEL이 변경될 수 있기 때문
         on_delete=models.CASCADE,
+        verbose_name="작성자",
     )
     message = models.TextField()
     photo = models.ImageField(blank=True, upload_to="instagram/post/%Y/%m/%d")

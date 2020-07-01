@@ -22,6 +22,7 @@ class PostAdmin(admin.ModelAdmin):
         "message",
         "message_length",
         "is_public",
+        "author",
         "created_at",
         "updated_at",
     ]
