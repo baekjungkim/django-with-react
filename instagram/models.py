@@ -13,6 +13,8 @@ class Post(models.Model):
     )
     message = models.TextField()
     photo = models.ImageField(blank=True, upload_to="instagram/post/%Y/%m/%d")
+    # ManyToMany Field
+    tag_set = models.ManyToManyField("Tag", blank=True)
     is_public = models.BooleanField(default=False, verbose_name="공개여부")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,3 +57,17 @@ class Comment(models.Model):
     def __str__(self):
 
         return self.message
+
+
+class Tag(models.Model):
+
+    """ Tag Model """
+
+    # post_set = models.ManyToManyField(Post)
+
+    name = models.CharField(max_length=50, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
