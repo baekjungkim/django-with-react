@@ -11,7 +11,7 @@ def post_list(request):
     if q:
         qs = qs.filter(message__icontains=q)
 
-    print(qs.query)
+    # print(qs.query)
 
     # instagram/templates/instagram/post_list.html
     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
