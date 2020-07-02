@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 
 from .models import Post
@@ -8,6 +11,7 @@ from .models import Post
 # post_list = ListView.as_view(model=Post)
 
 # Function Based View
+# @login_required  # 로그인 확인 장식자(Decorators)
 # def post_list(request):
 #     # reqeust.GET
 #     # request.POST
@@ -23,7 +27,10 @@ from .models import Post
 #     # instagram/templates/instagram/post_list.html
 #     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
 
+
 # Class Based View
+@method_decorator(login_required, name="dispatch")
+# class PostListView(LoginRequiredMixin, ListView): # LoginRequiredMixin == login_required
 class PostListView(ListView):
     model = Post
     paginate_by = 5
@@ -42,7 +49,12 @@ class PostListView(ListView):
         context["q"] = self.q
         return context
 
+    # @method_decorator(login_required)
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
 
+
+# post_list = login_required(PostListView.as_view())
 post_list = PostListView.as_view()
 
 
