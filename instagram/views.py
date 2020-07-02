@@ -1,6 +1,7 @@
-from django.views.generic import ListView
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView
+
 from .models import Post
 
 # Class Based View
@@ -23,14 +24,24 @@ def post_list(request):
     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
 
 
-def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
+# FBV 방식
+# def post_detail(request: HttpRequest, pk: int) -> HttpResponse:
+#     # try:
+#     #     post = Post.objects.get(pk=pk)  # DoesNotExist 예외
+#     # except Post.DoesNotExist:
+#     #     raise Http404
 
-    return render(request, "instagram/post_list.html", {})
+#     post = get_object_or_404(Post, pk=pk)
+
+#     return render(request, "instagram/post_detail.html", {"post": post,})
+
+# CBV 방식
+post_detail = DetailView.as_view(model=Post)
 
 
 def archives_year(request, year):
     return HttpResponse(f"{year}년 archives")
 
 
-def archives_slug(request, slug):
-    return HttpResponse(f"{slug} 입니다.")
+# def archives_slug(request, slug):
+#     return HttpResponse(f"{slug} 입니다.")

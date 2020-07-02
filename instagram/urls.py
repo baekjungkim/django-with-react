@@ -30,5 +30,5 @@ urlpatterns = [
     # path("archives/<int:year>/", views.archives_year),
     path("archives/<year:year>/", views.archives_year),
     # re_path(r"archives/(?P<year>\d{4})/", views.archives_year),
-    path("archives/<slug:slug>/", views.archives_slug),
+    # path("archives/<slug:slug>/", views.archives_slug),
 ]
