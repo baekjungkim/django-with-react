@@ -8,20 +8,36 @@ from .models import Post
 # post_list = ListView.as_view(model=Post)
 
 # Function Based View
-def post_list(request):
-    # reqeust.GET
-    # request.POST
-    # request.FILES
-    qs = Post.objects.all()
-    q = request.GET.get("query", "")
+# def post_list(request):
+#     # reqeust.GET
+#     # request.POST
+#     # request.FILES
+#     qs = Post.objects.all()
+#     q = request.GET.get("query", "")
 
-    if q:
-        qs = qs.filter(message__icontains=q)
+#     if q:
+#         qs = qs.filter(message__icontains=q)
 
-    # print(qs.query)
+#     # print(qs.query)
 
-    # instagram/templates/instagram/post_list.html
-    return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
+#     # instagram/templates/instagram/post_list.html
+#     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
+
+# Class Based View
+class PostListView(ListView):
+    model = Post
+    paginate_by = 5
+
+    def get_queryset(self):
+        q = self.request.GET.get("query", "")
+        qs = super().get_queryset()
+        if q:
+            qs = qs.filter(message__icontains=q)
+
+        return qs
+
+
+post_list = PostListView.as_view()
 
 
 # FBV 방식
@@ -41,6 +57,8 @@ def post_list(request):
 # )
 
 
+# CBV 방식으로 DetailView를 상속받아서 Override 해준다.
+# DetailVeiw Class 의 SingleObjectMixin Override.
 class PostDetailView(DetailView):
     model = Post
     # queryset = Post.objects.filter(is_public=True)
@@ -52,6 +70,7 @@ class PostDetailView(DetailView):
         return qs
 
 
+# 정의된 Class로 실행.
 post_detail = PostDetailView.as_view()
 
 
