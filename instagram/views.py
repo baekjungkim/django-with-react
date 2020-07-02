@@ -36,7 +36,23 @@ def post_list(request):
 #     return render(request, "instagram/post_detail.html", {"post": post,})
 
 # CBV 방식
-post_detail = DetailView.as_view(model=Post)
+# post_detail = DetailView.as_view(
+#     model=Post, queryset=Post.objects.filter(is_public=True)
+# )
+
+
+class PostDetailView(DetailView):
+    model = Post
+    # queryset = Post.objects.filter(is_public=True)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if not self.request.user.is_authenticated:
+            qs = qs.filter(is_public=True)
+        return qs
+
+
+post_detail = PostDetailView.as_view()
 
 
 def archives_year(request, year):
