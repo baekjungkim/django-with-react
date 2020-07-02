@@ -27,14 +27,20 @@ from .models import Post
 class PostListView(ListView):
     model = Post
     paginate_by = 5
+    q = ""
 
     def get_queryset(self):
-        q = self.request.GET.get("query", "")
+        self.q = self.request.GET.get("query", "")
         qs = super().get_queryset()
-        if q:
-            qs = qs.filter(message__icontains=q)
+        if self.q:
+            qs = qs.filter(message__icontains=self.q)
 
         return qs
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["q"] = self.q
+        return context
 
 
 post_list = PostListView.as_view()
