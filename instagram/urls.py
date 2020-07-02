@@ -24,9 +24,9 @@ register_converter(SlugUnicodeConverter, "slug")
 app_name = "instagram"  # URL Reverse 에서 namespace 역할을 하게 됩니다.
 
 urlpatterns = [
-    path("", views.post_list),
+    path("", views.post_list, name="post_list"),
     # re_path(r"(?P<pk>\d+)/$", views.post_detail),
-    path("<int:pk>/", views.post_detail),
+    path("<int:pk>/", views.post_detail, name="post_detail"),
     # path("archives/<int:year>/", views.archives_year),
     path("archives/<year:year>/", views.archives_year),
     # re_path(r"archives/(?P<year>\d{4})/", views.archives_year),
