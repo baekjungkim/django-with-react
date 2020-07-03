@@ -23,7 +23,7 @@ class PostAdmin(admin.ModelAdmin):
         "message_length",
         "is_public",
         "author",
-        "tag",
+        "get_tag",
         "created_at",
         "updated_at",
     ]
@@ -39,9 +39,10 @@ class PostAdmin(admin.ModelAdmin):
     def message_length(self, post):
         return f"{len(post.message)} 글자"
 
-    def tag(self, post):
+    def get_tag(self, post):
         return ", ".join([tag.name for tag in post.tag_set.all()])
 
+    get_tag.short_description = "tag"
     photo_tag.short_description = "photo"
     message_length.short_description = "메세지 글자수"
 
