@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView, ListView
+from django.views.generic import ArchiveIndexView, DetailView, ListView, YearArchiveView
 
 from .models import Post
 
@@ -92,9 +92,16 @@ class PostDetailView(DetailView):
 post_detail = PostDetailView.as_view()
 
 
-def archives_year(request, year):
-    return HttpResponse(f"{year}년 archives")
+# def archives_year(request, year):
+#     return HttpResponse(f"{year}년 archives")
 
+post_archive = ArchiveIndexView.as_view(
+    model=Post, date_field="created_at", paginate_by=5, date_list_period="month",
+)
+
+post_archive_year = YearArchiveView.as_view(
+    model=Post, date_field="created_at", make_object_list=True,
+)
 
 # def archives_slug(request, slug):
 #     return HttpResponse(f"{slug} 입니다.")
