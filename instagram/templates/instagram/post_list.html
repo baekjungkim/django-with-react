@@ -30,6 +30,7 @@
                 </td>
                 <td>
                     {% comment %} <a href="{% url 'instagram:post_detail' post.pk %}"> {% endcomment %}
+                        {% comment %} URL Reverse Post Model 참조 {% endcomment %}
                         <a href="{{ post.get_absolute_url }}">
                             {{ post.message }}
                         </a>

@@ -33,6 +33,7 @@ class Post(models.Model):
 
     # URL Reverse 지정
     # URL Reverse를 간단하게 사용할 수 있음
+    # post_list.html template 참조
     def get_absolute_url(self):
         return reverse("instagram:post_detail", args=[self.pk])
 
