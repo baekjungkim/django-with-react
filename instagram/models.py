@@ -1,5 +1,6 @@
 from django.conf import settings  # settings import
 from django.db import models
+from django.urls import reverse
 
 
 class Post(models.Model):
@@ -29,6 +30,11 @@ class Post(models.Model):
         # return f"Custom Post object ({self.id})"
 
         return self.message
+
+    # URL Reverse 지정
+    # URL Reverse를 간단하게 사용할 수 있음
+    def get_absolute_url(self):
+        return reverse("instagram:post_detail", args=[self.pk])
 
     class Meta:
         ordering = ["-id"]
