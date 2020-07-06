@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.conf.global_settings import STATICFILES_DIRS
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,7 +28,7 @@ SECRET_KEY = "6)!vv4wy7go&as5e0%xp!sb&-7(6s!77pgz=(*0ok@n(d!dj)m"
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "76c17b751ab0.ngrok.io",
+    # "76c17b751ab0.ngrok.io",
 ]
 
 
@@ -127,7 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
-# STATIC_ROOT = ""  # TODO
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "askcompany", "static")]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -135,4 +138,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 INTERNAL_IPS = ["127.0.0.1"]
 
 AUTH_USER_MODEL = "auth.User"  # Default로 Django 의 Auth User Model
-
