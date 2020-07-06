@@ -26,6 +26,7 @@ urlpatterns = [
     # path("archives/<slug:slug>/", views.archives_slug),
     path("archive/", views.post_archive, name="post_archive"),
     path("archive/<year:year>/", views.post_archive_year, name="post_archive_year"),
+    path("melon/", views.melon_list, name="melon_list"),
     # path(
     #     "archive/<year:year>/<month:month>/",
     #     views.post_archive_month,

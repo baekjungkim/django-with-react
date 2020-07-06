@@ -14,8 +14,16 @@ Instagram / Post List
 
 <table class="table table-bordered table-hover">
     <tbody>
+        <thead>
+            <tr>
+                <th>NO.</th>
+                <th>Photo</th>
+                <th>Message</th>
+                <th>Author</th>
+            </tr>
+        </thead>
         {% for post in post_list %}
-        <tr>
+        <tr onClick="location.href='{{ post.get_absolute_url }}'">
             <td>{{ post.pk }}</td>
             <td>
                 {% if post.photo %}
@@ -32,6 +40,7 @@ Instagram / Post List
                     </a>
                     {% comment %} </a> {% endcomment %}
             </td>
+            <td>{{ post.author }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -42,8 +51,8 @@ Instagram / Post List
 {{ is_paginated }}
 {{ page_obj }}
 {% endcomment %}
-{% if is_paginated %}
+{% comment %} {% if is_paginated %}
+{% endif %} {% endcomment %}
 {% bootstrap_pagination page_obj size="small" justify_content="center" %}
-{% endif %}
 
 {% endblock content %}

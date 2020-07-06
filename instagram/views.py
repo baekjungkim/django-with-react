@@ -105,3 +105,7 @@ post_archive_year = YearArchiveView.as_view(
 
 # def archives_slug(request, slug):
 #     return HttpResponse(f"{slug} 입니다.")
+
+
+def melon_list(request):
+    return render(request, "instagram/melon_list.html", {})
