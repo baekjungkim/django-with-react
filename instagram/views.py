@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -29,19 +30,33 @@ from .models import Post
 #     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
 
 
+# https://docs.djangoproject.com/en/3.0/ref/request-response/
+# HttpRequest.META : request 로 넘어오는 값들, ex) REMOTE_ADDR : The IP address of the client.
+@login_required  # 로그인 인증이 되었다는 확인. 로그인 페이지가 구현되어있다면 로그인 페이지로 이동. 구현 안되어있으면 404페이지 이동
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.author = request.user  # 현재 로그인 User Instance
+            # post.ip = request.META['REMOTE_ADDR']  # Client IP
+            post.save()
             return redirect(post)
     else:
         form = PostForm()
     return render(request, "instagram/post_form.html", {"form": form})
 
 
+@login_required
 def post_edit(request, pk):
-    post = Post.objects.get(pk=pk)
+    post = get_object_or_404(Post, pk=pk)
+
+    # 작성자 Check Tip!
+    # Custom Decorator(장식자) 로 만들어서 사용할 수 있음.
+    if post.author != request.user:
+        messages.error(request, "작성자만 수정할 수 있습니다.")
+        return redirect(post)
+
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
