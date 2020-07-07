@@ -1,6 +1,12 @@
 from django.conf import settings  # settings import
+from django.core.validators import (
+    MinLengthValidator,
+)  # 되로록이면 valid 함수를 만들지말고 되어있는것을 사용하자
 from django.db import models
 from django.urls import reverse
+
+# min_length_validator = MinLengthValidator(3)
+# min_length_validator("he")  # forms.ValidationError
 
 
 class Post(models.Model):
@@ -12,7 +18,7 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         verbose_name="작성자",
     )
-    message = models.TextField()
+    message = models.TextField(validators=[MinLengthValidator(10)])
     photo = models.ImageField(blank=True, upload_to="instagram/post/%Y/%m/%d")
     # ManyToMany Field
     tag_set = models.ManyToManyField("Tag", blank=True)

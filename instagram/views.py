@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import ArchiveIndexView, DetailView, ListView, YearArchiveView
 
+from .forms import PostForm
 from .models import Post
 
 # Class Based View
@@ -26,6 +27,29 @@ from .models import Post
 
 #     # instagram/templates/instagram/post_list.html
 #     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
+
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save()
+            return redirect(post)
+    else:
+        form = PostForm()
+    return render(request, "instagram/post_form.html", {"form": form})
+
+
+def post_edit(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save()
+            return redirect(post)
+    else:
+        form = PostForm(instance=post)
+    return render(request, "instagram/post_form.html", {"form": form})
 
 
 # Class Based View

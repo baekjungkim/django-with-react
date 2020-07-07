@@ -14,10 +14,21 @@ Instagram / {{ post.author }}
 </div>
 {% endif %}
 
-{{ post.message }}
+{{ post.message }}<br />
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" disabled {% if post.is_public %}
+        checked{% endif %}>
+    <label class="form-check-label" for="defaultCheck1">
+        공개여부
+    </label>
+</div>
 <hr />
 <a href="{% url 'instagram:post_list'%}" class="btn btn-primary">
     목록
+</a>
+
+<a href="{% url 'instagram:post_edit' post.id %}" class="btn btn-danger">
+    수정
 </a>
 
 {% endblock content %}

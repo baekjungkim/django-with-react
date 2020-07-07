@@ -1,0 +1,18 @@
+ {% extends "instagram/layout.html" %}
+ {% load bootstrap4 %}
+
+ {% block title %}
+ Instagram / Post Form
+ {% endblock title %}
+
+ {% block content %}
+
+ <form action="" method="POST" enctype="multipart/form-data">
+     {% csrf_token %}
+     <table>
+         {{ form }}
+     </table>
+     <input type="submit" value="저장" />
+ </form>
+
+ {% endblock content %}
