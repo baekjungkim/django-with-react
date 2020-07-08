@@ -48,6 +48,17 @@ def post_edit(request, pk):
     return render(request, "instagram/post_form.html", {"form": form, "post": post})
 
 
+@login_required
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        post.delete()
+        messages.success(request, "포스팅을 삭제했습니다.")
+        return redirect("instagram:post_list")
+
+    return render(request, "instagram/post_confirm_delete.html", {"post": post})
+
+
 # Class Based View
 @method_decorator(login_required, name="dispatch")
 # class PostListView(LoginRequiredMixin, ListView): # LoginRequiredMixin == login_required
