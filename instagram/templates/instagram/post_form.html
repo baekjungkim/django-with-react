@@ -9,10 +9,18 @@
 
  <form action="" method="POST" enctype="multipart/form-data">
      {% csrf_token %}
-     <table>
+     {% bootstrap_form form %}
+     {% comment %} <table>
          {{ form }}
-     </table>
-     <input type="submit" value="저장" />
+     </table> {% endcomment %}
+     {% buttons %}
+     {% if post %}
+     <a href="{{ post.get_absolute_url }}" class="btn btn-danger">취소</a>
+     {% endif %}
+     <button class="btn btn-primary">저장</button>
+     {% endbuttons %}
+     {% comment %} <input type="submit" value="저장" class="btn btn-sm btn-primary" /> {% endcomment %}
  </form>
+
 
  {% endblock content %}

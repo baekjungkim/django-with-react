@@ -9,27 +9,6 @@ from django.views.generic import ArchiveIndexView, DetailView, ListView, YearArc
 from .forms import PostForm
 from .models import Post
 
-# Class Based View
-# post_list = ListView.as_view(model=Post)
-
-# Function Based View
-# @login_required  # 로그인 확인 장식자(Decorators)
-# def post_list(request):
-#     # reqeust.GET
-#     # request.POST
-#     # request.FILES
-#     qs = Post.objects.all()
-#     q = request.GET.get("query", "")
-
-#     if q:
-#         qs = qs.filter(message__icontains=q)
-
-#     # print(qs.query)
-
-#     # instagram/templates/instagram/post_list.html
-#     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
-
-
 # https://docs.djangoproject.com/en/3.0/ref/request-response/
 # HttpRequest.META : request 로 넘어오는 값들, ex) REMOTE_ADDR : The IP address of the client.
 @login_required  # 로그인 인증이 되었다는 확인. 로그인 페이지가 구현되어있다면 로그인 페이지로 이동. 구현 안되어있으면 404페이지 이동
@@ -41,10 +20,11 @@ def post_new(request):
             post.author = request.user  # 현재 로그인 User Instance
             # post.ip = request.META['REMOTE_ADDR']  # Client IP
             post.save()
+            messages.success(request, "포스팅을 저장했습니다.")
             return redirect(post)
     else:
         form = PostForm()
-    return render(request, "instagram/post_form.html", {"form": form})
+    return render(request, "instagram/post_form.html", {"form": form, "post": None})
 
 
 @login_required
@@ -61,10 +41,11 @@ def post_edit(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save()
+            messages.success(request, "포스팅을 수정했습니다.")
             return redirect(post)
     else:
         form = PostForm(instance=post)
-    return render(request, "instagram/post_form.html", {"form": form})
+    return render(request, "instagram/post_form.html", {"form": form, "post": post})
 
 
 # Class Based View
@@ -88,13 +69,28 @@ class PostListView(ListView):
         context["q"] = self.q
         return context
 
-    # @method_decorator(login_required)
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
+
+# @method_decorator(login_required)
+# def dispatch(self, *args, **kwargs):
+#     return super().dispatch(*args, **kwargs)
 
 
 # post_list = login_required(PostListView.as_view())
 post_list = PostListView.as_view()
+
+# Function Based View
+# @login_required  # 로그인 확인 장식자(Decorators)
+# def post_list(request):
+#     qs = Post.objects.all()
+#     q = request.GET.get("query", "")
+
+#     if q:
+#         qs = qs.filter(message__icontains=q)
+
+#     messages.info(request, "messages 테스트")
+
+#     # instagram/templates/instagram/post_list.html
+#     return render(request, "instagram/post_list.html", {"post_list": qs, "q": q})
 
 
 # FBV 방식
