@@ -1,6 +1,9 @@
+from os.path import altsep
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -78,6 +81,18 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "포스팅을 수정했습니다.")
         return super().form_valid(form)
 
+    # 사용자 인증 기능.
+    def dispatch(self, request, *args, **kwargs):
+        # self.object 에 현재 post object를 담는다.
+        self.object = self.get_object()
+        # post object의 author 와 로그인 user를 비교
+        if not self.object.author == request.user:
+            # 같지 않으면 메시지 출력
+            messages.error(request, "작성자만 수정할 수 있습니다.")
+            # 상세 화면으로 이동.
+            return redirect(self.object)
+        return super(PostUpdateView, self).dispatch(request, *args, **kwargs)
+
 
 post_edit = PostUpdateView.as_view()
 
@@ -100,11 +115,23 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     #     return reverse("instagram:post_list")
     success_url = reverse_lazy("instagram:post_list")
 
+    # 사용자 인증 기능.
+    def dispatch(self, request, *args, **kwargs):
+        # self.object 에 현재 post object를 담는다.
+        self.object = self.get_object()
+        # post object의 author 와 로그인 user를 비교
+        if not self.object.author == request.user:
+            # 같지 않으면 메시지 출력
+            messages.error(request, "작성자만 삭제할 수 있습니다.")
+            # 상세 화면으로 이동.
+            return redirect(self.object)
+        return super(PostDeleteView, self).dispatch(request, *args, **kwargs)
+
 
 post_delete = PostDeleteView.as_view()
 
 # Class Based View
-@method_decorator(login_required, name="dispatch")
+# @method_decorator(login_required, name="dispatch")
 # class PostListView(LoginRequiredMixin, ListView): # LoginRequiredMixin == login_required
 class PostListView(ListView):
     model = Post
@@ -116,7 +143,8 @@ class PostListView(ListView):
         qs = super().get_queryset()
         if self.q:
             qs = qs.filter(message__icontains=self.q)
-
+        if not self.request.user.is_authenticated:
+            qs = qs.filter(is_public=True)
         return qs
 
     def get_context_data(self):
@@ -171,6 +199,7 @@ class PostDetailView(DetailView):
     model = Post
     # queryset = Post.objects.filter(is_public=True)
 
+    # 로그인 안했으면 비공개 포스팅은 볼 수 없다.
     def get_queryset(self):
         qs = super().get_queryset()
         if not self.request.user.is_authenticated:

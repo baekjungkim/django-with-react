@@ -26,7 +26,7 @@ Instagram / Post List
         </thead>
         {% for post in post_list %}
         <tr onClick="location.href='{{ post.get_absolute_url }}'">
-            <td>{{ post.pk }}</td>
+            <td>{{ post.id }}</td>
             <td>
                 {% if post.photo %}
                 <img src={{ post.photo.url }} style="width: 75px;" />

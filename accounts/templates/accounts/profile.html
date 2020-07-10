@@ -1,0 +1,24 @@
+{% extends "accounts/layout.html"%}
+{% load bootstrap4 %}
+
+{% block title %}
+Instagram / {{ user }} Profile
+{% endblock title %}
+
+{% block content %}
+{% comment %} user :
+- 로그인: User 모델 인스턴스
+- 로그아웃 : AnonymousUser(파이썬 클래스) 인스턴스 {% endcomment %}
+<h2>User: {{ user }}</h2>
+{% comment %} {{ user.is_authenticated }} {% endcomment %}
+
+{% if user.profile %}
+<ul>
+    <li>{{ user.profile.address }}</li>
+    <li>{{ user.profile.zipcode }}</li>
+</ul>
+
+{% endif %}
+<a href="{% url "accounts:profile_edit" %}" class="btn btn-primary">수정</a>
+<a href="{% url "instagram:post_list" %}" class="btn btn-danger">목록</a>
+{% endblock content %}
