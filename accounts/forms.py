@@ -2,6 +2,9 @@
 # import re
 
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+from nbformat import ValidationError
+
 from .models import Profile
 
 
@@ -22,3 +25,12 @@ class ProfileForm(forms.ModelForm):
     #         message = re.sub(r"[a-zA-Z]+", "", message)
     #     return message
 
+
+class LoginForm(AuthenticationForm):
+    answer = forms.IntegerField(help_text="3 + 3 = ?")
+
+    def clean_answer(self):
+        answer = self.cleaned_data.get("answer")
+        if answer != 6:
+            raise forms.ValidationError("떙!")
+        return answer
