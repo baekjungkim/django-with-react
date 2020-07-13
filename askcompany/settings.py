@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 from django.conf.global_settings import STATICFILES_DIRS
+from django.contrib.messages import constants as messages_constants
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -87,6 +89,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "askcompany.wsgi.application"
 
 
+LOGIN_REDIRECT_URL = reverse_lazy("instagram:post_list")
+LOGOUT_REDIRECT_URL = reverse_lazy("instagram:post_list")
+
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -139,13 +145,8 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 AUTH_USER_MODEL = "auth.User"  # Default로 Django 의 Auth User Model
 
-from django.contrib.messages import constants as messages_constants
 
 MESSAGE_TAGS = {
     messages_constants.DEBUG: "secondary",
     messages_constants.ERROR: "danger",
 }
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-
